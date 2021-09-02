@@ -58,7 +58,7 @@ def getOKLToken():
     post_data = {
         'lang': 'chs',
         'appid': 300,
-        'returnurl': returnurl_url.format(post_time_stamp),
+        'returnurl': return_url.format(post_time_stamp),
         'source': 'wq_passport'
     }
     post_header = {
