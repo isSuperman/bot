@@ -54,7 +54,7 @@ def parseGetRespCookie(headers, get_resp):
 
 def getOKLToken():
     post_time_stamp = int(time.time() * 1000)
-    post_url = token_url.format.(s_token, post_time_stamp)
+    post_url = token_url.format(s_token, post_time_stamp)
     post_data = {
         'lang': 'chs',
         'appid': 300,
