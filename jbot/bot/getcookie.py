@@ -19,25 +19,21 @@ cookies = ""
 token, okl_token = "", ""
 # 最终获取到的可用的cookie
 jd_cookie = ""
-jd_ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 SP-engine/2.14.0 main%2F1.0 baiduboxapp/11.18.0.16 (Baidu; P2 13.3.1) NABar/0.0'
-jd_get_url= 'https://plogin.m.jd.com/cgi-bin/mm/new_login_entrance?lang=chs&appid=300&returnurl=https://wq.jd.com/passport/LoginRedirect?state={0}&returnurl=https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport'
-referer_url='https://plogin.m.jd.com/login/login?appid=300&returnurl=https://wq.jd.com/passport/LoginRedirect?state={0}&returnurl=https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport'
-return_url='https://wqlogin2.jd.com/passport/LoginRedirect?state={0}&returnurl=//home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action'
-token_url='https://plogin.m.jd.com/cgi-bin/m/tmauthreflogurl?s_token={0}&v={1}&remember=true'
-qrcode_url='https://plogin.m.jd.com/cgi-bin/m/tmauth?appid=300&client_type=m&token={0}'
+
 
 def getSToken():
     time_stamp = int(time.time() * 1000)
+    get_url = 'https://plogin.m.jd.com/cgi-bin/mm/new_login_entrance?lang=chs&appid=300&returnurl=https://wq.jd.com/passport/LoginRedirect?state=%s&returnurl=https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport' % time_stamp
     get_header = {
         'Connection': 'Keep-Alive',
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'zh-cn',
-        'Referer': referer_url.format(time_stamp),
-        'User-Agent': jd_ua,
+        'Referer': 'https://plogin.m.jd.com/login/login?appid=300&returnurl=https://wq.jd.com/passport/LoginRedirect?state=%s&returnurl=https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport' % time_stamp,
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 SP-engine/2.14.0 main%2F1.0 baiduboxapp/11.18.0.16 (Baidu; P2 13.3.1) NABar/0.0',
         'Host': 'plogin.m.jd.com'
     }
-    resp = requests.get(url=jd_get_url.format(time_stamp), headers=get_header)
+    resp = requests.get(url=get_url, headers=get_header)
     parseGetRespCookie(resp.headers, resp.json())
 
 
@@ -54,11 +50,12 @@ def parseGetRespCookie(headers, get_resp):
 
 def getOKLToken():
     post_time_stamp = int(time.time() * 1000)
-    post_url = token_url.format(s_token, post_time_stamp)
+    post_url = 'https://plogin.m.jd.com/cgi-bin/m/tmauthreflogurl?s_token=%s&v=%s&remember=true' % (
+        s_token, post_time_stamp)
     post_data = {
         'lang': 'chs',
         'appid': 300,
-        'returnurl': return_url.format(post_time_stamp),
+        'returnurl': 'https://wqlogin2.jd.com/passport/LoginRedirect?state=%s&returnurl=//home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action' % post_time_stamp,
         'source': 'wq_passport'
     }
     post_header = {
@@ -66,8 +63,8 @@ def getOKLToken():
         'Content-Type': 'application/x-www-form-urlencoded; Charset=UTF-8',
         'Accept': 'application/json, text/plain, */*',
         'Cookie': cookies,
-        'Referer': referer_url.format(post_time_stamp),
-        'User-Agent': jd_ua,
+        'Referer': 'https://plogin.m.jd.com/login/login?appid=300&returnurl=https://wqlogin2.jd.com/passport/LoginRedirect?state=%s&returnurl=//home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport' % post_time_stamp,
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 SP-engine/2.14.0 main%2F1.0 baiduboxapp/11.18.0.16 (Baidu; P2 13.3.1) NABar/0.0',
         'Host': 'plogin.m.jd.com',
     }
     try:
@@ -147,16 +144,16 @@ async def my_cookie(event):
             check_data = {
                 'lang': 'chs',
                 'appid': 300,
-                'returnurl': return_url.format(check_time_stamp),
+                'returnurl': 'https://wqlogin2.jd.com/passport/LoginRedirect?state=%s&returnurl=//home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action' % check_time_stamp,
                 'source': 'wq_passport'
             }
             check_header = {
-                'Referer': referer_url.format(check_time_stamp),
+                'Referer': f'https://plogin.m.jd.com/login/login?appid=300&returnurl=https://wqlogin2.jd.com/passport/LoginRedirect?state=%s&returnurl=//home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&/myJd/home.action&source=wq_passport' % check_time_stamp,
                 'Cookie': cookies,
                 'Connection': 'Keep-Alive',
                 'Content-Type': 'application/x-www-form-urlencoded; Charset=UTF-8',
                 'Accept': 'application/json, text/plain, */*',
-                'User-Agent': jd_ua,
+                'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 SP-engine/2.14.0 main%2F1.0 baiduboxapp/11.18.0.16 (Baidu; P2 13.3.1) NABar/0.0',
             }
             resp = requests.post(
                 url=check_url, headers=check_header, data=check_data, timeout=30)
